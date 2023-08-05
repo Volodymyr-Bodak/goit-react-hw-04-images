@@ -16,10 +16,15 @@ const App = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasMoreImages, setHasMoreImages] = useState(true);
+  const [initialSearchDone, setInitialSearchDone] = useState(false);
 
   useEffect(() => {
-    fetchImages(query, currentPage);
-  }, [query, currentPage]);
+    if (initialSearchDone) {
+      fetchImages(query, currentPage);
+    } else {
+      setInitialSearchDone(true);
+    }
+  }, [query, currentPage, initialSearchDone]);
 
   const searchImages = (searchQuery) => {
     setImages([]);
@@ -61,23 +66,19 @@ const App = () => {
     setSelectedImage(null);
   };
 
-  const all = () => {
-    return (
-      <div>
-        <SearchBar onSubmit={searchImages} />
-        {images.length > 0 && (
-          <ImageGallery images={images} onImageClick={handleImageClick} />
-        )}
-        {selectedImage && <Modal image={selectedImage} onClose={handleModalClose} />}
-        {images.length > 0 && hasMoreImages && !loading && (
-          <Button onClick={handleLoadMore} />
-        )}
-        {loading && <Spinner />}
-      </div>
-    );
-  };
-
-  return all();
+  return (
+    <div>
+      <SearchBar onSubmit={searchImages} />
+      {images.length > 0 && (
+        <ImageGallery images={images} onImageClick={handleImageClick} />
+      )}
+      {selectedImage && <Modal image={selectedImage} onClose={handleModalClose} />}
+      {images.length > 0 && hasMoreImages && !loading && (
+        <Button onClick={handleLoadMore} />
+      )}
+      {loading && <Spinner />}
+    </div>
+  );
 };
 
 export default App;
