@@ -16,15 +16,6 @@ const App = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasMoreImages, setHasMoreImages] = useState(true);
-  const [initialSearchDone, setInitialSearchDone] = useState(false);
-
-  useEffect(() => {
-    if (initialSearchDone) {
-      fetchImages(query, currentPage);
-    } else {
-      setInitialSearchDone(true);
-    }
-  }, [query, currentPage, initialSearchDone]);
 
   const searchImages = (searchQuery) => {
     setImages([]);
@@ -33,6 +24,12 @@ const App = () => {
     setLoading(true);
     setHasMoreImages(true);
   };
+
+  useEffect(() => {
+    if (query) {
+      fetchImages(query, currentPage);
+    }
+  }, [query, currentPage]);
 
   const fetchImages = async (searchQuery, page) => {
     setLoading(true);
